@@ -21,7 +21,7 @@ The wasup workflow has three phases:
 3. **Execute** - Build with atomic commits on feature branches
 4. **Release** - Tag and merge to master
 
-## Prerequest: wasup config file
+## Prerequisites: wasup config file
 
 Gennerate `.wasup/wasup.toml` in the root directory with template: 
 ```markdown
