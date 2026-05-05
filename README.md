@@ -18,6 +18,7 @@ A collection of AI agent skills for task management and project documentation sy
 
 - **wsp-opt** - Structured development workflow with MoSCoW prioritization, git integration, and atomic commits
 - **wsp-sync** - Automated documentation sync that scans and updates outdated `.md` files
+- **Relote** (In EAP) - The release note generater skill
 
 ## Installation
 
@@ -33,4 +34,4 @@ Contributing welcome, fork this repo and create a PR!
 
 ## License
 
-MIT License
+Apache 2.0 License
