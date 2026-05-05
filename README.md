@@ -7,7 +7,7 @@
 
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
-### ~ Introduce the new Feature of Wasup: Review is now in Early Access Program (EAP status) ~
+### ~ Introduce the new Feature of Wasup: Review is now in Early Access Program (EAP) ~
 
 </div>
 
