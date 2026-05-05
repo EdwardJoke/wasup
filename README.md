@@ -1,6 +1,8 @@
 
 <div align="center">
 
+![The Brand picture of Wasup](/assets/wasup.png)
+
 # Wasup Skill
 
 ![badge](https://shieldcn.dev/github/edwardjoke/wasup/downloads.svg?theme=amber&color=174084) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/last-commit.svg)<br/>
@@ -36,3 +38,7 @@ Contributing welcome, fork this repo and create a PR!
 ## License
 
 Apache 2.0 License
+
+## Thanks
+
+I'm using [Monaspace](https://github.com/githubnext/monaspace) as font of Brand Picture.
