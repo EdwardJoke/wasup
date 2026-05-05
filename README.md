@@ -11,15 +11,15 @@
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
 ### ~ Introduce the new Feature of Wasup ~
-*Review and Relote is now in Early Access Program (EAP)*
-*Relote is a new skill in Wasup family, it's design for generate Release Notes for your project*
+*Review and Relote is now in **Early Access Program** (EAP)*
+*Relote is a new skill in Wasup family, it's design for **Generate Release Notes** for your project*
 
 ---
 </div>
 
 ## Features
 
-- **wsp-opt** - Structured development workflow with MoSCoW prioritization, git integration, and atomic commits
+- **wsp-opt** - Structured development workflow with `MoSCoW` (Must/Should/Could/Won't Have) prioritization, git integration, and atomic commits
 - **wsp-sync** - Automated documentation sync that scans and updates outdated `.md` files
 - **Relote** (In EAP) - The release note generater skill
 
