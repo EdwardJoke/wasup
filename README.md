@@ -1,7 +1,7 @@
 
 <div align="center">
 
-![The Brand picture of Wasup](/assets/wasup.png)
+![The Brand picture of Wasup](/assets/Wasup.png)
 
 # Wasup Skill
 
