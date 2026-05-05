@@ -1,9 +1,9 @@
 
 <div align="center">
 
-# wasup
+# Wasup Skill
 
-![badge](https://shieldcn.dev/github/edwardjoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/last-commit.svg)
+![badge](https://shieldcn.dev/github/edwardjoke/wasup/downloads.svg?theme=amber&color=174084) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/last-commit.svg)
 
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
