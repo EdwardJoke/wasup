@@ -11,8 +11,8 @@
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
 ### ~ Introduce the new Feature of Wasup ~
-*Review and Relote is now in **Early Access Program** (EAP)*
-*Relote is a new skill in Wasup family, it's design for **Generate Release Notes** for your project*
+*Relote is now in **Early Access Program** (EAP)*
+*Relote is a new skill in the Wasup series designed to **Generate Release Notes** for your projects*
 
 ---
 </div>
@@ -33,7 +33,7 @@ npx skills add EdwardJoke/wasup
 
 ## Contributing
 
-Contributing welcome, fork this repo and create a PR!
+We welcome code contributions! Please fork this repository and submit a pull request!
 
 ## License
 
@@ -41,4 +41,4 @@ Apache 2.0 License
 
 ## Thanks
 
-I'm using [Monaspace](https://github.com/githubnext/monaspace) as font of Brand Picture.
+We have chosen [Monaspace](https://github.com/githubnext/monaspace) as the font for the display images.
