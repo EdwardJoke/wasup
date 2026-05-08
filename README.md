@@ -11,8 +11,7 @@
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
 ### ~ Introduce the new Feature of Wasup ~
-*Relote is now in **Early Access Program** (EAP)*
-*Relote is a new skill in the Wasup series designed to **Generate Release Notes** for your projects*
+*After I test **Relote** in Hoz, it's now fully grown and ready for use*
 
 ---
 </div>
@@ -21,23 +20,45 @@ A collection of AI agent skills for task management and project documentation sy
 
 - **wsp-opt** - Structured development workflow with `MoSCoW` (Must/Should/Could/Won't Have) prioritization, git integration, and atomic commits
 - **wsp-sync** - Automated documentation sync that scans and updates outdated `.md` files
-- **Relote** (In EAP) - The release note generater skill
+- **Relote** - The release note generater skill
 
-## Installation
+---
 
-### Use skills manager from Vercel
+## Quick Start
+
+To get started with Wasup, follow these steps:
+
+### Installation
+
+#### Use skills manager from Vercel (Recommended)
 
 ```bash
+# Use `npx skills`
 npx skills add EdwardJoke/wasup
+
+# Or you can download the `.zip` file directly (Not recommended)
+# Because you will lost the automated update feature
 ```
+
+### Usage
+
+1. Use `/wsp-opt` to start a project
+2. Use `/relote` to generate release notes
+3. Use `/wsp-sync` to sync documentation
+
+---
 
 ## Contributing
 
 We welcome code contributions! Please fork this repository and submit a pull request!
 
+---
+
 ## License
 
 Apache 2.0 License
+
+---
 
 ## Thanks
 
