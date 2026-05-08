@@ -7,7 +7,7 @@ description: >
   "task management", "MoSCoW", "todo list", or when the user wants to organize and execute
   development work with proper git branching, atomic commits, and release management.
   Also trigger when user mentions wasup, purpose files, feature branches, or structured workflows.
-  metadata:
+metadata:
   author: EdwardJoke
   version: 2.1.0
 ---
