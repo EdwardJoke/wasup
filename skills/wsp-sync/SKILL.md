@@ -7,6 +7,9 @@ description: >
   project's status. Also trigger when user mentions stale docs, conflicting memories,
   documentation drift, or wants a clean handoff to teammates or other agents.
   Works across Claude Code, OpenAI Codex, OpenCode, and OpenClaw.
+metadata:
+  author: EdwardJoke
+  version: 2.1.0
 ---
 
 # wsp-sync - Project Documentation Sync

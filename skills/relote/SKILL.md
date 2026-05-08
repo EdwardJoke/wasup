@@ -8,6 +8,9 @@ description: >
   "summarize this release", or mentions "relote", "changelog", "release notes".
   Also trigger when the user finishes a release and wants a formal changelog,
   or needs to document what changed between tags in Keep-A-Changelog format.
+metadata:
+  author: EdwardJoke
+  version: 2.1.0
 ---
 
 # relote - Release Notes Generator
