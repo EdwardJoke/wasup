@@ -201,34 +201,6 @@ Never skip **any** steps until there is no issues, then jump to the next phase.
 
 ## Phase 5: Release
 
-### Create Release Notes
-
-Create `.wasup/tags/v0.1.0.md`:
-
-```markdown
-# Release v0.1.0
-
-## What's New
-- [Feature/benefit 1]
-- [Feature/benefit 2]
-
-## Completed Tasks
-- [x] M1: ...
-- [x] M2: ...
-
-## Bug Fixed
-- [x] Bug1: ...
-
-## PRs
-- [#1]: Merge PR [#1] from [author]
-
-## Known Issues
-- [Any remaining could-haves or limitations]
-
-## Upgrade Notes
-[Any breaking changes or migration steps]
-```
-
 ### Tag and Merge
 
 Ask user: "Which branch should the current branch be merged into, dev or master?"
