@@ -15,11 +15,12 @@ A structured development workflow that takes an idea from concept to released fe
 
 ## Overview
 
-The wasup workflow has three phases:
+The wasup workflow has five phases:
 1. **Purpose** - Capture what to build
 2. **Plan** - Define tasks using MoSCoW method
 3. **Execute** - Build with atomic commits on feature branches
-4. **Release** - Tag and merge to master
+4. **Review** - Review and approve changes before merging to master
+5. **Release** - Tag and merge to master
 
 ## Prerequisites: wasup config file
 
