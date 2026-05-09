@@ -173,34 +173,9 @@ Continue until all Must-have and Should-have tasks are done, then ask for Could-
 
 ## Phase 4: Review
 
-### Deep scan the project
+Spawn a reviewer subagent (or review inline) that reads `agents/reviewer.md` and perform the tasks listed in the review note based on the output results.
 
-Scan this project properly, ignore the files/folders that inside `.gitignore`. Then found the exist issues inside the project.
-
-### Create Review Notes
-
-Create `.wasup/reviews/v0.1.0-r[ReviewTimes].md` ([ReviewTime] start on 1):
-
-```markdown
-# Review [ReviewTimes] of vx.y.z
-
-## What is not avaliable but Must/Should avaliable
-- [] [Feature 1] inside Task [M/S 1]
-- [] [Feature 2] inside Task [M/S 2]
-
-## Is the `build` command passed?
-- [Status]
-```
-
-### Loop
-
-Add priority ordering within each category. Mark the very first task with `**NEXT**` label.
-
-Fix the `**Next**` task, then mark `[]` as `[x]`, then come to the next very first unfix issue to work.
-
-Stop until all the task is complete, then starts the second Review.
-
-Never skip **any** steps until there is no issues, then jump to the next phase.
+After reviewer done its job, rerun it immediately with fresh context, until it think every todo items inside todo file are done, then bump to the next phase.
 
 ## Phase 5: Release
 
