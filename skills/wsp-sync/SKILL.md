@@ -9,7 +9,7 @@ description: >
   Works across Claude Code, OpenAI Codex, OpenCode, and OpenClaw.
 metadata:
   author: EdwardJoke
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # wsp-sync - Project Documentation Sync

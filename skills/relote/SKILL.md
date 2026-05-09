@@ -10,7 +10,7 @@ description: >
   or needs to document what changed between tags in Keep-A-Changelog format.
 metadata:
   author: EdwardJoke
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # relote - Release Notes Generator

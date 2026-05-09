@@ -9,7 +9,7 @@ description: >
   Also trigger when user mentions wasup, purpose files, feature branches, or structured workflows.
 metadata:
   author: EdwardJoke
-  version: 2.1.0
+  version: 2.2.0
 ---
 
 # wasup - Task Management Skill
