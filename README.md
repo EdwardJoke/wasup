@@ -11,7 +11,7 @@
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
 ### ~ Introduce the new Feature of Wasup ~
-*After I test **Relote** in [Hoz](https://github.com/EdwardJoke/hoz-vcs), it's now fully grown and ready for use* `News 05/07`
+*After I test **Relote** in [Hoz](https://github.com/EdwardJoke/hoz-vcs), it's now fully grown and ready for use* `News 05/07`<br/>
 *Introduced **Reviewer** agent inside `wsp-opt`* `News 05/09`
 
 ---
