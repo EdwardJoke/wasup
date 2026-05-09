@@ -5,13 +5,13 @@
 
 # Wasup Skill
 
-![badge](https://shieldcn.dev/github/edwardjoke/wasup/downloads.svg?theme=amber&color=174084) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/edwardjoke/wasup/last-commit.svg)<br/>
-![GitHub Open Issues](https://shieldcn.dev/github/open-issues/edwardjoke/wasup.svg?variant=outline) ![GitHub Contributors](https://shieldcn.dev/github/contributors/edwardjoke/wasup.svg?variant=outline&theme=emerald)
+![badge](https://shieldcn.dev/github/EdwardJoke/wasup/downloads.svg?theme=amber&color=174084) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/last-commit.svg)<br/>
+![GitHub Open Issues](https://shieldcn.dev/github/open-issues/EdwardJoke/wasup.svg?variant=outline) ![GitHub Contributors](https://shieldcn.dev/github/contributors/EdwardJoke/wasup.svg?variant=outline&theme=emerald)
 
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
 ### ~ Introduce the new Feature of Wasup ~
-*After I test **Relote** in Hoz, it's now fully grown and ready for use*
+*After I test **Relote** in [Hoz](https://github.com/EdwardJoke/hoz-vcs), it's now fully grown and ready for use*
 
 ---
 </div>
