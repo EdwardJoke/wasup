@@ -1,0 +1,50 @@
+name: Bug & User Experience Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+projects: ["EdwardJoke/wasup"]
+assignees:
+  - skiller
+type: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!   /^_^)/
+        You must use the latest version of Wasup Skill to reproduce this bug, because the latest update might have fixed it.
+        So please run `npx skills update` to update to the latest version first.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: dropdown
+    id: agent-tool
+    attributes:
+      label: What agent tool are you seeing the problem on?
+      multiple: true
+      options:
+        - Codex
+        - Claude Code
+        - Cursor
+        - Codebuddy
+        - Trae
+        - Windsurf
+        - Others
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Please copy and paste any relevant context.
+      render: shell
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false

@@ -1,0 +1,36 @@
+name: Feature Request
+description: File a feature request.
+title: "[FEAT]: "
+labels: ["feature", "triage"]
+projects: ["EdwardJoke/wasup"]
+assignees:
+  - skiller
+type: feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Please provide a detailed description of the feature you would like to see added."
+      placeholder: "Enter a detailed description of the feature you would like to see added."
+      value: "A beatiful feature"
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: "Alternative"
+      description: "Please provide an alternative solution or idea for the feature you would like to see added."
+      placeholder: "Enter an alternative solution or idea for the feature you would like to see added."
+      value: "The alternative beautiful feature"
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain your problem.
+    validations:
+      required: false
