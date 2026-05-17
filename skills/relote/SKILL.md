@@ -1,16 +1,9 @@
 ---
 name: relote
-description: >
-  Generate a Keep-A-Changelog formatted changelog for the latest git tag.
-  Deeply integrates wsp-opt and wsp-sync outputs, aggregates git history,
-  and produces a structured release notes file. Use this skill whenever the user
-  asks to "generate changelog", "release notes", "what changed in vX.Y.Z",
-  "summarize this release", or mentions "relote", "changelog", "release notes".
-  Also trigger when the user finishes a release and wants a formal changelog,
-  or needs to document what changed between tags in Keep-A-Changelog format.
+description: Generate Keep-A-Changelog release notes from git history and wsp-opt/wsp-sync outputs. Trigger: changelog, release notes, relote.
 metadata:
   author: EdwardJoke
-  version: 2.2.0
+  version: 2.3.0
 ---
 
 # relote - Release Notes Generator
