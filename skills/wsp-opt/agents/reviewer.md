@@ -1,5 +1,6 @@
 <!---
-Fork from Anthropic skill's source code
+Based on patterns from Anthropic skill examples.
+Licensed under Apache 2.0 — see LICENSE.md.
 ---->
 
 # The Reviewer Agent
