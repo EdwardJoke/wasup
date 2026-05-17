@@ -12,7 +12,8 @@ A collection of AI agent skills for task management and project documentation sy
 
 ### ~ Introduce the new Feature of Wasup ~
 *After I test **Relote** in [Hoz](https://github.com/EdwardJoke/hoz-vcs), it's now fully grown and ready for use* `News 05/07`<br/>
-*Introduced **Reviewer** agent inside `wsp-opt`* `News 05/09`
+*Introduced **Reviewer** agent inside `wsp-opt`* `News 05/09`<br/>
+*Introduced **wsp-gate** — pre-release security & production gate* `News 05/17`
 
 ---
 </div>
@@ -20,6 +21,7 @@ A collection of AI agent skills for task management and project documentation sy
 ## Features
 
 - **wsp-opt** - Structured development workflow with `MoSCoW` (Must/Should/Could/Won't Have) prioritization, git integration, and atomic commits
+- **wsp-gate** - Pre-release security & production-readiness gate. Runs dep audits, secrets scan, test health, memory patterns, and unused code checks before release
 - **wsp-sync** - Automated documentation sync that scans and updates outdated `.md` files
 - **Relote** - The release note generator skill
 
@@ -46,8 +48,9 @@ npx skills add EdwardJoke/wasup
 These are **skill names** that auto-trigger when you say the keywords to your AI agent:
 
 1. Say **"start a new project"** or **"let's build [feature]"** to activate `wsp-opt`
-2. Say **"generate changelog"** or **"relote"** to activate `relote`
-3. Say **"sync up"** or **"sync docs"** to activate `wsp-sync`
+2. Say **"run gate"** or **"production check"** to activate `wsp-gate`
+3. Say **"generate changelog"** or **"relote"** to activate `relote`
+4. Say **"sync up"** or **"sync docs"** to activate `wsp-sync`
 
 ---
 
