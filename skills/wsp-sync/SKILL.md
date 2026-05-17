@@ -1,12 +1,6 @@
 ---
 name: wsp-sync
-description: >
-  Sync project documentation with current codebase state by scanning and updating outdated .md files.
-  Use this skill whenever the user says "sync up", "sync my project status", "update docs",
-  "tidy up docs", "update memory", "clean up docs", or wants to update/sync the current
-  project's status. Also trigger when user mentions stale docs, conflicting memories,
-  documentation drift, or wants a clean handoff to teammates or other agents.
-  Works across Claude Code, OpenAI Codex, OpenCode, and OpenClaw.
+description: Scan and update outdated .md files to match the codebase. Trigger: sync up, update docs, tidy up docs, clean up docs.
 metadata:
   author: EdwardJoke
   version: 2.2.0

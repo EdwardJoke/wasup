@@ -5,8 +5,8 @@
 
 # Wasup Skill
 
-![badge](https://shieldcn.dev/github/EdwardJoke/wasup/downloads.svg?theme=amber&color=174084) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/license.svg) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/stars.svg) ![badge](https://shieldcn.dev/github/EdwardJoke/wasup/last-commit.svg)<br/>
-![GitHub Open Issues](https://shieldcn.dev/github/open-issues/EdwardJoke/wasup.svg?variant=outline) ![GitHub Contributors](https://shieldcn.dev/github/contributors/EdwardJoke/wasup.svg?variant=outline&theme=emerald)
+![badge](https://img.shields.io/github/downloads/EdwardJoke/wasup/total?style=flat&color=174084) ![badge](https://img.shields.io/github/license/EdwardJoke/wasup?style=flat) ![badge](https://img.shields.io/github/stars/EdwardJoke/wasup?style=flat) ![badge](https://img.shields.io/github/last-commit/EdwardJoke/wasup?style=flat)<br/>
+![GitHub Open Issues](https://img.shields.io/github/issues/EdwardJoke/wasup?style=flat) ![GitHub Contributors](https://img.shields.io/github/contributors/EdwardJoke/wasup?style=flat)
 
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
@@ -21,7 +21,7 @@ A collection of AI agent skills for task management and project documentation sy
 
 - **wsp-opt** - Structured development workflow with `MoSCoW` (Must/Should/Could/Won't Have) prioritization, git integration, and atomic commits
 - **wsp-sync** - Automated documentation sync that scans and updates outdated `.md` files
-- **Relote** - The release note generater skill
+- **Relote** - The release note generator skill
 
 ---
 
@@ -41,11 +41,13 @@ npx skills add EdwardJoke/wasup
 # Because you will lost the automated update feature
 ```
 
-### Usage
+### Usage (AI Agent Prompts)
 
-1. Use `/wsp-opt` to start a project
-2. Use `/relote` to generate release notes
-3. Use `/wsp-sync` to sync documentation
+These are **skill names** that auto-trigger when you say the keywords to your AI agent:
+
+1. Say **"start a new project"** or **"let's build [feature]"** to activate `wsp-opt`
+2. Say **"generate changelog"** or **"relote"** to activate `relote`
+3. Say **"sync up"** or **"sync docs"** to activate `wsp-sync`
 
 ---
 

@@ -1,12 +1,6 @@
 ---
 name: wsp-opt
-description: >
-  Task management skill for structured development workflow with git integration.
-  Use this skill whenever the user wants to start a new project, feature, or development task.
-  Triggers on phrases like "let's build", "start working on", "create a new feature",
-  "task management", "MoSCoW", "todo list", or when the user wants to organize and execute
-  development work with proper git branching, atomic commits, and release management.
-  Also trigger when user mentions wasup, purpose files, feature branches, or structured workflows.
+description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. Trigger: let's build, task management, wasup.
 metadata:
   author: EdwardJoke
   version: 2.2.0
@@ -27,7 +21,7 @@ The wasup workflow has five phases:
 
 ## Prerequisites: wasup config file
 
-Gennerate `.wasup/wasup.toml` in the root directory with template: 
+Generate `.wasup/wasup.toml` in the root directory with template: 
 ```markdown
 [repo]
 name = [the name of root folder]
@@ -173,9 +167,13 @@ Continue until all Must-have and Should-have tasks are done, then ask for Could-
 
 ## Phase 4: Review
 
-Spawn a reviewer subagent (or review inline) that reads `agents/reviewer.md` and perform the tasks listed in the review note based on the output results.
+Run the reviewer by reading `agents/reviewer.md` and following its instructions to check the project against the todo list.
 
-After reviewer done its job, rerun it immediately with fresh context, until it think every todo items inside todo file are done, then bump to the next phase.
+**If your platform supports spawning sub-agents** (e.g., Claude Code): delegate the review to a sub-agent with the reviewer instructions.
+
+**Otherwise (fallback):** perform the review inline yourself — scan the project for bugs, missing implementations, and code quality issues, then compare against the todo items. Track which tasks are truly complete and which need more work.
+
+After the review finishes, re-run it with fresh context. Repeat until every todo item is verified complete, then advance to Phase 5.
 
 ## Phase 5: Release
 
@@ -187,8 +185,10 @@ Ask user: "Which branch should the current branch be merged into, dev or master?
 git tag -a v0.1.0 -m "Release v0.1.0"
 git checkout master # or dev
 git merge --no-ff feat/v0.1.0-feature -m "Merge feat/v0.1.0-feature into master" # or dev
+git push origin master # or dev
+git push origin --tags
 ```
 
-Present to user: "Release vx.y.z is ready. I've tagged and merged to master/dev. The feature branch `feat/vx.y.z-[name]` is now merged. What's next?"
+Present to user: "Release vx.y.z is ready. I've tagged, pushed, and merged to master/dev. The tag and feature branch are now on remote. What's next?"
 
 Stop here. Wait for user direction.
