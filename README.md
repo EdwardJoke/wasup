@@ -10,11 +10,6 @@
 
 A collection of AI agent skills for task management and project documentation synchronization. Built to help developers and AI agents get out of task management troubles.
 
-### ~ Introduce the new Feature of Wasup ~
-*After I test **Relote** in [Hoz](https://github.com/EdwardJoke/hoz-vcs), it's now fully grown and ready for use* `News 05/07`<br/>
-*Introduced **Reviewer** agent inside `wsp-opt`* `News 05/09`<br/>
-*Introduced **wsp-gate** — pre-release security & production gate* `News 05/17`
-
 ---
 </div>
 
@@ -33,15 +28,21 @@ To get started with Wasup, follow these steps:
 
 ### Installation
 
-#### Use skills manager from Vercel (Recommended)
+#### Use the Official Initializer (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/EdwardJoke/wasup/master/init.sh | bash
+```
+
+#### Use skills manager from Vercel
 
 ```bash
 # Use `npx skills`
 npx skills add EdwardJoke/wasup
-
-# Or you can download the `.zip` file directly (Not recommended)
-# Because you will lost the automated update feature
 ```
+
+#### Download the `.zip` file directly (Not recommended)
+We don't recommand you to do this, because this will lost the automated update feature.
 
 ### Usage (AI Agent Prompts)
 
