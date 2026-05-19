@@ -65,7 +65,12 @@ Save their answer in the What section. Then ask: "Why does this matter? What pro
 
 Ask the user: "The scope of updates in the current version is: Function (Main) / Patch (Major) / Bug (Minor) / Type your own Version Number ?"
 
-Create a versioned todo file `.wasup/todos/vx.y.z.md` (start with `v1.0.0`, `v0.1.0` or `v.0.0.1`, based on the update scope selected by the user: Function to add 1 on `x`, Patch to add 1 on `y` and Bug to add 1 on `z`).
+Create a versioned todo file `.wasup/todos/vx.y.z.md` using strict semver format only (`vX.Y.Z`, for example `v1.0.0`, `v0.1.0`, `v0.0.1`).
+
+Version bump rules:
+- **Function (Main)**: bump major (`x`) and reset minor/patch to zero.
+- **Patch (Major)**: bump minor (`y`) and reset patch to zero.
+- **Bug (Minor)**: bump patch (`z`) only.
 
 Then update the `current_version` inside `.wasup/wasup.toml`.
 
@@ -180,6 +185,18 @@ After the review finishes, re-run it with fresh context. Repeat until every todo
 ### Tag and Merge
 
 Ask user: "Which branch should the current branch be merged into, dev or master?"
+
+Before running any release command, present a final release checklist and require explicit confirmation:
+
+```markdown
+Release plan for confirmation:
+- Version tag: vx.y.z
+- Source branch: feat/vx.y.z-<short-description>
+- Target branch: master|dev
+- Commands to run: git tag, git checkout, git merge, git push, git push --tags
+```
+
+If the user does not explicitly confirm, stop and do not run any release commands.
 
 ```bash
 git tag -a v0.1.0 -m "Release v0.1.0"

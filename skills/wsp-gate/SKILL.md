@@ -52,7 +52,7 @@ If no `[gate]` section exists or `enabled = false`, skip all checks and report "
 Each check follows a three-tier priority:
 
 1. **Specialized skill** — if a skill exists for this check, delegate to it
-2. **CLI tool** — run the dedicated CLI; if not installed, **ask the user** before installing
+2. **CLI tool** — run the dedicated CLI when installed
 3. **Generic fallback** — use built-in analysis when nothing better is available
 
 ### `audit` — Dependency Vulnerability Scan
@@ -199,9 +199,8 @@ grep -rE '^mod |^pub mod |^use |^pub use ' src/ --include='*.rs' | \
 4. For each check in [gate].checks:
    a. Attempt tier-1: dedicated skill → if available, delegate and collect result
    b. Attempt tier-2: CLI → check if installed
-      - If not installed: ask user "Install <tool>? (y/n)"
-      - If yes: install it (brew/cargo/npm/pip), proceed
-      - If no: fall through to tier-3
+      - If installed: run it and collect findings
+      - If not installed: record `tool missing` warning and fall through to tier-3 automatically
    c. Fallback to tier-3: generic built-in analysis
 5. Aggregate all check results
 6. Determine gate verdict:
@@ -268,7 +267,7 @@ Or if FAILED:
 
 ## Important Notes
 
-- **Ask before installing**: Never install a CLI tool without user confirmation. The skill should say: "`gitleaks` is not installed. Install it? (y/n)"
+- **No installs during gate run**: If a CLI tool is missing, do not install it during this workflow. Use fallback checks and record the tool as missing in the report.
 - **Respect `.gitignore`**: Skip `node_modules/`, `target/`, `.git/`, `build/` in all file scans
 - **False positives**: When using generic fallbacks, bias toward reporting *potential* issues and let the user decide. Never silently fail a gate on a false positive.
 - **Speed**: Prefer CLI tools over generic fallbacks — they're faster and more accurate. Generic fallbacks are the last resort.
