@@ -70,3 +70,9 @@ Apache 2.0 License
 ## Thanks
 
 We have chosen [Monaspace](https://github.com/githubnext/monaspace) as the font for the display images.
+
+---
+
+## More about Me
+
+Check on my [website](https://edxdev.netlify.app)
