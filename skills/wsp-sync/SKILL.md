@@ -1,6 +1,6 @@
 ---
 name: wsp-sync
-description: Scan and update outdated .md files to match the codebase. Trigger: sync up, update docs, tidy up docs, clean up docs.
+description: Scan and update outdated .md files to match the codebase. The trigger is sync up, update docs, tidy up docs, clean up docs.
 metadata:
   author: EdwardJoke
   version: 2.3.0

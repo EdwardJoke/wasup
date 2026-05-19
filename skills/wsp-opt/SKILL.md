@@ -1,6 +1,6 @@
 ---
 name: wsp-opt
-description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. Trigger: let's build, task management, wasup.
+description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. The trigger is let's build, task management, wasup.
 metadata:
   author: EdwardJoke
   version: 2.3.0
