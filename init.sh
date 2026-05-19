@@ -25,13 +25,13 @@ case "$choice" in
   1)
     echo ""
     echo "Installing Wasup as project skill..."
-    pnpx skills add EdwardJoke/wasup
+    npx skills add EdwardJoke/wasup
     echo "Project install complete."
     ;;
   2)
     echo ""
     echo "Installing Wasup as global skill..."
-    pnpx skills add -g EdwardJoke/wasup
+    npx skills add -g EdwardJoke/wasup
     echo "Global install complete, continue install for the current project."
     exit 0
     ;;
