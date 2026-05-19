@@ -34,6 +34,7 @@ Add a `[gate]` section to `.wasup/wasup.toml`:
 enabled = true
 checks = ["audit", "secrets", "test_rate", "memory_patterns", "deprecated_api", "no_use"]
 fail_on = ["audit", "secrets", "deprecated_api"]
+fallback_list = ["secrets", "deprecated_api"] # optional: force manual fallback path for listed checks
 [gate.thresholds]
 test_pass_rate = 100          # minimum % of tests passing
 max_cves_critical = 0         # max critical CVEs allowed
@@ -43,6 +44,7 @@ max_cves_high = 0             # max high CVEs allowed
 - **enabled**: toggle the gate on/off
 - **checks**: which checks to run (see catalog below)
 - **fail_on**: which checks, if they report any issue, cause the gate to `FAILED` and block release
+- **fallback_list**: optional manual override list; checks in this list skip tier-1/tier-2 and run tier-3 fallback directly
 - **thresholds**: numeric pass/fail boundaries
 
 If no `[gate]` section exists or `enabled = false`, skip all checks and report "Gate skipped."
@@ -67,6 +69,12 @@ Each check follows a three-tier priority:
 | Generic | Parse lockfile → check against local `advisory-db` or OSV API | Fallback if no CLI available |
 
 **What it reports**: List of CVEs with severity, package, and fixed version. Also reports count per severity bucket.
+
+**Fallback correctness rules**:
+- Prefer lockfile-aware scanners (`cargo audit`, `npm audit`, `pip-audit`, `osv-scanner`) over ad-hoc queries.
+- Never fail the gate on an unverified CVE match from a generic query alone.
+- A CVE can block release only if it includes all of: package name, affected version in the repo, and severity (or CVSS) from the scanner/advisory response.
+- If fallback data is incomplete, mark as `NEEDS_REVIEW` (warning), include evidence, and do not treat as fail_on by itself.
 
 **Generic fallback query** (if no CLI and can't install):
 ```bash
@@ -97,6 +105,18 @@ Also scan for:
 - `.env` files committed to git
 
 **What it reports**: File, line number, and the type of secret detected. If a path is a known false positive (e.g., test fixtures), report it separately.
+
+**Fallback correctness rules**:
+- Treat regex hits as **potential** secrets until verified.
+- Verify with at least one additional signal before marking as confirmed:
+  - entropy/format check (token-like shape), or
+  - context check (not in docs/examples/tests), or
+  - a second detector/tool finding the same line/path.
+- Classify findings as:
+  - `confirmed` (high confidence),
+  - `needs_review` (medium confidence),
+  - `likely_false_positive` (low confidence).
+- Only `confirmed` findings should trigger fail_on behavior automatically.
 
 ### `test_rate` — Test Pass Percentage
 
@@ -165,6 +185,11 @@ cargo build 2>&1 | grep -i 'deprecated\|warning.*removed' | head -30
 
 **What it reports**: File, line number, the deprecated API name, and suggested replacement (if available from the warning message).
 
+**Fallback correctness rules**:
+- Prefer compiler/linter-produced deprecation warnings over static string matching.
+- Static pattern matches without compiler/linter evidence must be marked `needs_review`.
+- Only warnings that include file path and symbol/API name should be considered `confirmed`.
+
 ### `no_use` — Unused Files / Modules
 
 | Tier | Tool | Scope |
@@ -197,14 +222,15 @@ grep -rE '^mod |^pub mod |^use |^pub use ' src/ --include='*.rs' | \
 2. If !enabled → write "Gate skipped" report → exit
 3. mkdir -p .wasup/gates
 4. For each check in [gate].checks:
-   a. Attempt tier-1: dedicated skill → if available, delegate and collect result
-   b. Attempt tier-2: CLI → check if installed
+   a. If check is in [gate].fallback_list → run tier-3 directly and record `forced fallback (config)`
+   b. Else attempt tier-1: dedicated skill → if available, delegate and collect result
+   c. Else attempt tier-2: CLI → check if installed
       - If installed: run it and collect findings
       - If not installed: record `tool missing` warning and fall through to tier-3 automatically
-   c. Fallback to tier-3: generic built-in analysis
+   d. Fallback to tier-3: generic built-in analysis
 5. Aggregate all check results
 6. Determine gate verdict:
-   - If any check in fail_on has findings → verdict = FAILED
+   - If any check in fail_on has **confirmed** findings → verdict = FAILED
    - Else → verdict = PASSED
 7. Write gate report to .wasup/gates/vx.y.z.md
 8. If FAILED → present report and stop (do not proceed to release)
@@ -270,5 +296,6 @@ Or if FAILED:
 - **No installs during gate run**: If a CLI tool is missing, do not install it during this workflow. Use fallback checks and record the tool as missing in the report.
 - **Respect `.gitignore`**: Skip `node_modules/`, `target/`, `.git/`, `build/` in all file scans
 - **False positives**: When using generic fallbacks, bias toward reporting *potential* issues and let the user decide. Never silently fail a gate on a false positive.
+- **Confidence labels required**: For fallback security checks (`audit`, `secrets`, `deprecated_api`), label each finding as `confirmed`, `needs_review`, or `likely_false_positive`.
 - **Speed**: Prefer CLI tools over generic fallbacks — they're faster and more accurate. Generic fallbacks are the last resort.
 - **No side effects**: Never modify source code. Gate reads files, runs commands, writes reports — that's all.
