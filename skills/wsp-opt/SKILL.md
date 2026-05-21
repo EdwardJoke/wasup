@@ -3,7 +3,7 @@ name: wsp-opt
 description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. The trigger is let's build, task management, wasup.
 metadata:
   author: EdwardJoke
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # wasup - Task Management Skill
@@ -12,12 +12,13 @@ A structured development workflow that takes an idea from concept to released fe
 
 ## Overview
 
-The wasup workflow has five phases:
+The wasup workflow has six phases:
 1. **Purpose** - Capture what to build
 2. **Plan** - Define tasks using MoSCoW method
 3. **Execute** - Build with atomic commits on feature branches
 4. **Review** - Review and approve changes before merging to master
-5. **Release** - Tag and merge to master
+5. **Gate & Changelog** - Quality gate check then generate release notes
+6. **Release** - Tag and merge to master
 
 ## Prerequisites: wasup config file
 
@@ -41,25 +42,10 @@ Start by capturing the project idea in `.wasup/PURPOSE.md`.
 mkdir -p .wasup
 ```
 
-Create `.wasup/PURPOSE.md` with this structure:
-
-```markdown
-# Project Purpose
-
-## What
-[Describe what you want to build - one clear sentence]
-
-## Why
-[Why build this? What problem does it solve?]
-
-## Success Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-```
-
-Ask the user: "What's the one core function or feature you want this project to have? Describe it in one sentence."
-
-Save their answer in the What section. Then ask: "Why does this matter? What problem are you solving?" Save in Why section. Finally, ask: "How will you know it's done? List 2-3 success criteria."
+Create `.wasup/PURPOSE.md`. Ask user each question, fill as you go:
+- **What** — one sentence describing what to build
+- **Why** — what problem it solves
+- **Success Criteria** — 2-3 items that define done
 
 ## Phase 2: Plan with MoSCoW
 
@@ -76,13 +62,9 @@ Then update the `current_version` inside `.wasup/wasup.toml`.
 
 ### MoSCoW Method
 
-Explain to the user:
+Explain to user:
 
-> "We'll organize tasks using MoSCoW prioritization:
-> - **Must have** - Critical, without these the project fails
-> - **Should have** - Important but not critical for initial release
-> - **Could have** - Nice to have, consider for future
-> - **Won't have** - Explicitly out of scope for this version"
+> "MoSCoW: **Must** (critical — project fails without), **Should** (important, not blocking), **Could** (nice to have), **Won't** (explicitly out of scope this version)."
 
 Ask the user to list tasks they can think of. As they provide tasks, help categorize them into MoSCoW buckets. Then present the organized list:
 
@@ -143,18 +125,9 @@ Detailed explanation if needed"
 ```
 
 Commit message guidelines:
-- Use conventional commits: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
-- Keep the subject line under 50 chars
-- The body explains WHY, not WHAT (the diff shows what)
-- Each commit should be a single logical change that could stand alone
-- Follow the [Conventional Commits](https://www.conventionalcommits.org/) standard **exactly**:
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer(s)]
-```
+- Follow [Conventional Commits](https://www.conventionalcommits.org/) spec exactly: `<type>(<scope>): <description>`
+- Subject ≤50 chars. Body explains WHY (diff shows what).
+- Each commit = single logical change that could stand alone.
 
 After committing, update the todo file:
 - Mark the completed task: `- [x] M1: ...`
@@ -174,38 +147,63 @@ Continue until all Must-have and Should-have tasks are done, then ask for Could-
 
 Run the reviewer by reading `agents/reviewer.md` and following its instructions to check the project against the todo list.
 
-**If your platform supports spawning sub-agents** (e.g., Claude Code): delegate the review to a sub-agent with the reviewer instructions.
+Delegate review to sub-agent if platform supports it. Otherwise scan inline for bugs, missing impl, quality issues. Compare against todos.
 
-**Otherwise (fallback):** perform the review inline yourself — scan the project for bugs, missing implementations, and code quality issues, then compare against the todo items. Track which tasks are truly complete and which need more work.
+After the review finishes, re-run it with fresh context. Repeat until every todo item is verified complete.
 
-After the review finishes, re-run it with fresh context. Repeat until every todo item is verified complete, then advance to Phase 5.
+### Config Gate
 
-## Phase 5: Release
+Before proceeding, ensure `.wasup/wasup.toml` has a `[gate]` section:
+
+```toml
+[gate]
+enabled = true
+checks = ["audit", "secrets", "test_rate", "memory_patterns", "deprecated_api", "no_use"]
+fail_on = ["audit", "secrets", "deprecated_api"]
+thresholds.test_pass_rate = 100
+```
+
+Add one if missing. Then create required directories:
+
+```bash
+mkdir -p .wasup/gates .wasup/changelogs
+```
+
+## Phase 5: Gate & Changelog
+
+### Quality Gate
+
+Run `/wsp-gate`. Output: `.wasup/gates/vx.y.z.md`.
+- **FAILED** — fix fail_on items, re-run Review + Gate
+- **PASSED** — proceed to changelog
+
+### Release Notes
+
+Run `/relote`. Output: `.wasup/changelogs/vx.y.z.md`.
+
+```bash
+git add .wasup/changelogs/vx.y.z.md && git commit -m "docs(changelog): add vx.y.z release notes"
+```
+
+## Phase 6: Release
 
 ### Tag and Merge
 
 Ask user: "Which branch should the current branch be merged into, dev or master?"
 
-Before running any release command, present a final release checklist and require explicit confirmation:
+Present release checklist, require explicit confirmation:
 
 ```markdown
-Release plan for confirmation:
-- Version tag: vx.y.z
-- Source branch: feat/vx.y.z-<short-description>
-- Target branch: master|dev
-- Commands to run: git tag, git checkout, git merge, git push, git push --tags
+Release plan: tag=vx.y.z, source=feat/vx.y.z-<desc>, target=master|dev
+Commands: git tag, git checkout target, git merge --no-ff, git push, git push --tags
 ```
 
-If the user does not explicitly confirm, stop and do not run any release commands.
+If no explicit confirm, stop.
 
 ```bash
-git tag -a v0.1.0 -m "Release v0.1.0"
-git checkout master # or dev
-git merge --no-ff feat/v0.1.0-feature -m "Merge feat/v0.1.0-feature into master" # or dev
-git push origin master # or dev
-git push origin --tags
+git tag -a v0.1.0 -m "Release v0.1.0" && git checkout master && git merge --no-ff feat/v0.1.0-feature -m "Merge feat/v0.1.0-feature into master" && git push origin master && git push origin --tags
 ```
 
-Present to user: "Release vx.y.z is ready. I've tagged, pushed, and merged to master/dev. The tag and feature branch are now on remote. What's next?"
+Present: "Release vx.y.z ready. Tagged, pushed, merged. What's next?"
 
 Stop here. Wait for user direction.
