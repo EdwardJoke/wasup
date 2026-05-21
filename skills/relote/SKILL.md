@@ -3,7 +3,7 @@ name: relote
 description: Generate Keep-A-Changelog release notes from git history and wsp-opt/wsp-sync outputs. The trigger is changelog, release notes, relote.
 metadata:
   author: EdwardJoke
-  version: 2.3.0
+  version: 2.4.0
 ---
 
 # relote - Release Notes Generator
