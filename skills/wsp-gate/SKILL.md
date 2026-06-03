@@ -3,7 +3,7 @@ name: wsp-gate
 description: Pre-release security & production gate. Checks deps, secrets, test rate, memory patterns, deprecated APIs, unused code via CLIs/skills with generic fallback. The trigger is run gate, production check, security audit, is it ready to ship.
 metadata:
   author: EdwardJoke
-  version: 2.4.0
+  version: 26.1.0
 ---
 
 # wsp-gate — Pre-Release Quality Gate

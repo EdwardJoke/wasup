@@ -3,7 +3,7 @@ name: relote
 description: Generate Keep-A-Changelog release notes from git history and wsp-opt/wsp-sync outputs. The trigger is changelog, release notes, relote.
 metadata:
   author: EdwardJoke
-  version: 2.4.0
+  version: 26.1.0
 ---
 
 # relote - Release Notes Generator
@@ -23,7 +23,6 @@ Ensure these directories exist (create if missing):
 ```bash
 mkdir -p .wasup/changelogs
 mkdir -p .wasup/tags
-mkdir -p .wasup/sync
 ```
 
 ## Phase 1: Discover
