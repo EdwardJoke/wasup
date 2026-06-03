@@ -3,7 +3,7 @@ name: wsp-sync
 description: Scan and update outdated .md files to match the codebase. The trigger is sync up, update docs, tidy up docs, clean up docs.
 metadata:
   author: EdwardJoke
-  version: 2.4.0
+  version: 26.1.0
 ---
 
 # wsp-sync - Project Documentation Sync

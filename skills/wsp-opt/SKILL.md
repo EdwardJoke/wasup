@@ -3,7 +3,7 @@ name: wsp-opt
 description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. The trigger is let's build, task management, wasup.
 metadata:
   author: EdwardJoke
-  version: 2.4.0
+  version: 26.1.0
 ---
 
 # wasup - Task Management Skill
@@ -166,7 +166,7 @@ thresholds.test_pass_rate = 100
 Add one if missing. Then create required directories:
 
 ```bash
-mkdir -p .wasup/gates .wasup/changelogs
+mkdir -p .wasup/gates
 ```
 
 ## Phase 5: Gate & Changelog
