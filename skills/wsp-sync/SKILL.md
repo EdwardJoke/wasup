@@ -3,19 +3,12 @@ name: wsp-sync
 description: Scan and update outdated .md files to match the codebase. The trigger is sync up, update docs, tidy up docs, clean up docs.
 metadata:
   author: EdwardJoke
-  version: 26.1.0
+  version: 26.2.0
 ---
 
 # wsp-sync - Project Documentation Sync
 
 Automatically scan `.md` files, detect outdated information, and update documents to match the current codebase state. Generates a versioned sync report.
-
-## Overview
-
-The sync workflow has three phases:
-1. **Scan** - Deep scan all `.md` files in the project
-2. **Update** - Refresh outdated content (docs/ first, then root config files)
-3. **Report** - Output a versioned sync report
 
 ## Phase 1: Scan
 
@@ -29,13 +22,7 @@ This finds all markdown files worth scanning. Exclude build artifacts and depend
 
 ### 1.2 Read project context
 
-Read these files to understand current state:
-- `git status` - What's changed
-- `git log --oneline -20` - Recent history
-- `.wasup/todos/*.md` - Current task state
-- `.wasup/PURPOSE.md` - Project intent (if exists)
-
-Understanding what changed helps identify which docs are stale.
+Read: `but status -fv`, `git log --oneline -20`, `.wasup/todos/*.md`, `.wasup/PURPOSE.md`.
 
 ### 1.3 Identify outdated documents
 

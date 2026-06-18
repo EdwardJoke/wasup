@@ -1,24 +1,16 @@
 ---
 name: wsp-opt
-description: Structured dev workflow with MoSCoW prioritization, git branching, and atomic commits. The trigger is let's build, task management, wasup.
+description: Structured dev workflow with MoSCoW prioritization, GitButler branching, and atomic commits. The trigger is let's build, task management, wasup.
 metadata:
   author: EdwardJoke
-  version: 26.1.0
+  version: 26.2.0
 ---
 
 # wasup - Task Management Skill
 
-A structured development workflow that takes an idea from concept to released feature using MoSCoW prioritization, git branching, and atomic commits.
+A structured development workflow that takes an idea from concept to released feature using MoSCoW prioritization, GitButler (but) branching, and atomic commits.
 
-## Overview
-
-The wasup workflow has six phases:
-1. **Purpose** - Capture what to build
-2. **Plan** - Define tasks using MoSCoW method
-3. **Execute** - Build with atomic commits on feature branches
-4. **Review** - Review and approve changes before merging to master
-5. **Gate & Changelog** - Quality gate check then generate release notes
-6. **Release** - Tag and merge to master
+> **Important**: All Git write operations **must** use the `but` CLI. Never use `git add`, `git commit`, `git push`, `git checkout`, `git merge`, `git rebase`, `git stash`, or `git cherry-pick`. Read-only Git commands (`git log`, `git diff`, `git describe`) remain safe.
 
 ## Prerequisites: wasup config file
 
@@ -36,22 +28,20 @@ main = "master"
 
 ## Phase 1: Purpose
 
-Start by capturing the project idea in `.wasup/PURPOSE.md`.
+Create `.wasup/PURPOSE.md`. Ask user:
+- **What** — one sentence describing what to build
+- **Why** — what problem it solves
+- **Success Criteria** — 2-3 items that define done
 
 ```bash
 mkdir -p .wasup
 ```
 
-Create `.wasup/PURPOSE.md`. Ask user each question, fill as you go:
-- **What** — one sentence describing what to build
-- **Why** — what problem it solves
-- **Success Criteria** — 2-3 items that define done
-
 ## Phase 2: Plan with MoSCoW
 
 Ask the user: "The scope of updates in the current version is: Function (Main) / Patch (Major) / Bug (Minor) / Type your own Version Number ?"
 
-Create a versioned todo file `.wasup/todos/vx.y.z.md` using strict semver format only (`vX.Y.Z`, for example `v1.0.0`, `v0.1.0`, `v0.0.1`).
+Create a versioned todo file `.wasup/todos/vx.y.z.md` using strict semver format only (`vX.Y.Z`).
 
 Version bump rules:
 - **Function (Main)**: bump major (`x`) and reset minor/patch to zero.
@@ -100,13 +90,14 @@ Finally, add priority ordering within each category. Mark the very first task wi
 
 ### Start Feature Branch
 
-Read `.wasup/todos/vx.y.z.md` to identify the NEXT task. Create a feature branch:
+Read `.wasup/todos/vx.y.z.md` to identify the NEXT task. First check current state, then create a feature branch:
 
 ```bash
-git checkout -b feat/v0.1.0-[short-description]
+but status -fv
+but branch new feat/v<version>-<short-description>
 ```
 
-Example: `git checkout -b feat/v0.1.0-auth`
+Example: `but branch new feat/v0.1.0-auth`
 
 ### Build the Task
 
@@ -115,14 +106,14 @@ Focus on the current NEXT task only. Break it into small, completable steps. Wor
 1. Implement the step
 2. Test/build to check for errors
 3. Fix any issues before moving to next step
-4. When step is complete and working, make an atomic commit:
+4. When step is complete and working, make an atomic commit with GitButler:
 
 ```bash
-git add [specific files]
-git commit -m "type(scope): description
-
-Detailed explanation if needed"
+but status -fv
+but commit <branch-id> -m "type(scope): description"
 ```
+
+> Use `but status -fv` first to get the current branch ID. The commit command will include all changes on that branch.
 
 Commit message guidelines:
 - Follow [Conventional Commits](https://www.conventionalcommits.org/) spec exactly: `<type>(<scope>): <description>`
@@ -182,7 +173,8 @@ Run `/wsp-gate`. Output: `.wasup/gates/vx.y.z.md`.
 Run `/relote`. Output: `.wasup/changelogs/vx.y.z.md`.
 
 ```bash
-git add .wasup/changelogs/vx.y.z.md && git commit -m "docs(changelog): add vx.y.z release notes"
+but status -fv
+but commit <branch-id> -m "docs(changelog): add vx.y.z release notes"
 ```
 
 ## Phase 6: Release
@@ -195,15 +187,19 @@ Present release checklist, require explicit confirmation:
 
 ```markdown
 Release plan: tag=vx.y.z, source=feat/vx.y.z-<desc>, target=master|dev
-Commands: git tag, git checkout target, git merge --no-ff, git push, git push --tags
+Commands: but status -fv, git tag, but merge, but push, git push --tags
 ```
 
 If no explicit confirm, stop.
 
 ```bash
-git tag -a v0.1.0 -m "Release v0.1.0" && git checkout master && git merge --no-ff feat/v0.1.0-feature -m "Merge feat/v0.1.0-feature into master" && git push origin master && git push origin --tags
+but status -fv
+git tag -a v<version> -m "Release v<version>"
+but merge <feature-branch-id>
+but push <target-branch-id>
+git push origin --tags
 ```
 
-Present: "Release vx.y.z ready. Tagged, pushed, merged. What's next?"
+Present: "Release vx.y.z ready. Tagged, merged, pushed. What's next?"
 
 Stop here. Wait for user direction.

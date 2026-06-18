@@ -43,16 +43,53 @@ Each skill is **self-contained** and can be used independently. The pipeline flo
 
 ---
 
+## Prerequisites
+
+This project requires **GitButler**, a Git workspace manager that uses virtual branches and the `but` CLI.
+
+> **Why GitButler?** Wasup's skills (`wsp-opt`, `wsp-sync`, etc.) orchestrate Git operations exclusively through `but` — never raw `git` — for safer, branchless workflows.
+
+### Install GitButler CLI (`but`)
+
+#### macOS & Linux
+
+Run the official installer script:
+
+```bash
+curl -fsSL https://gitbutler.com/install.sh | sh
+```
+
+This installs the `but` command globally and sets up the GitButler CLI.
+
+#### Via GitButler Desktop (All Platforms)
+
+1. Download and install the [GitButler desktop app](https://gitbutler.com/download) for your platform
+2. Open the app → **General Settings**
+3. Click **"Install CLI"** — this creates a global symlink so `but` is available in your terminal
+
+#### Windows
+
+Install the [GitButler desktop app](https://gitbutler.com/download) and use the **"Install CLI"** button in Settings. Windows CLI support is evolving alongside the desktop client.
+
+#### Verify Installation
+
+```bash
+but --version
+```
+
+You should see a version number (e.g., `but 0.x.y`).
+
+---
+
 ## Quick Start
 
 To get started with Wasup, follow these steps:
 
-### Installation
+### Install Wasup Skills
 
 #### Use skills manager from Vercel (Recommended)
 
 ```bash
-# Use `npx skills`
 npx skills add EdwardJoke/wasup
 # Or
 pnpx skills add EdwardJoke/wasup
@@ -63,7 +100,7 @@ aubx skills add EdwardJoke/wasup
 ```
 
 #### Download the `.zip` file directly (Not recommended)
-We don't recommand you to do this, because this will lost the automated update feature.
+We don't recommend this as it loses the automated update feature.
 
 ### Usage (AI Agent Prompts)
 
