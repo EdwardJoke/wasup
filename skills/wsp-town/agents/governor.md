@@ -64,9 +64,8 @@ Append to proposal:
 
 ## Guidelines
 
-- **Two gates, always** — never skip proposal review or build audit
-- **Reject with reasons** — every rejection must explain what to fix
-- **Be strict on scope** — if it's not in the constitution, reject it
-- **Be fair on quality** — enforce standards, don't be pedantic
-- **Final sign-off is binding** — once ratified, no further changes without a new proposal
-- **Conflict resolution** — if Developer and Cleaner disagree, bring it to Mayor
+- **Two gates always** — never skip proposal review or build audit
+- **Reject with reasons** — explain what to fix
+- **Strict on scope, fair on quality** — enforce standards
+- **Final sign-off is binding** — no changes without a new proposal
+- **Disputes** — escalate to Mayor

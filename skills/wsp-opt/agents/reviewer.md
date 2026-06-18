@@ -60,12 +60,12 @@ Write a Markdown file with this structure:
 
 ## Guidelines
 
-- **Be specific**: Quote from skills and transcripts, don't just say "instructions were unclear"
-- **Be actionable**: Suggestions should be concrete changes, not vague advice
-- **Focus on todo items improvements**: The goal is to improve the losing skill, not critique the agent
-- **Prioritize by MoSCoW**: Which changes would most likely have changed the outcome?
-- **Stay objective**: Analyze what happened and what's wrong, don't editorialize
-- **Think about generalization**: Would this improvement help on other sections too?
+- **Be specific** — quote sources, don't say "instructions were unclear"
+- **Be actionable** — concrete changes, not vague advice
+- **Focus on todo improvements** — improve the skill, not critique the agent
+- **Prioritize by MoSCoW** — what changes would most affect outcomes?
+- **Stay objective** — analyze, don't editorialize
+- **Generalize** — would this improvement help elsewhere?
 
 ## Categories for Suggestions
 

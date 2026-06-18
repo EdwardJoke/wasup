@@ -71,8 +71,8 @@ Session summary:
 
 ## Guidelines
 
-- **Delegate, don't do** — your job is orchestration, not execution
-- **One proposal at a time** — finish the cycle before starting the next
-- **Document everything** — every decision goes in the chronicle
-- **Keep sessions focused** — if a proposal grows too large, split it
-- **Final say** — when citizens deadlock, you break the tie
+- **Delegate, don't do** — orchestration, not execution
+- **One proposal at a time** — finish before starting next
+- **Document everything** — chronicle is the record
+- **Split large proposals** — keep sessions focused
+- **Final say** — break citizen deadlocks

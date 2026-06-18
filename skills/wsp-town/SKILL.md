@@ -3,7 +3,7 @@ name: wsp-town
 description: Town governance simulation — Mayor orchestrates citizens with optional integration to external services (wsp-opt, wsp-sync, wsp-gate, relote). The trigger is town hall, wsp-town, citizens assemble.
 metadata:
   author: EdwardJoke
-  version: 26.1.0
+  version: 26.2.0
 ---
 
 # wsp-town — Town Governance Simulation 🔬 Public Preview
@@ -28,47 +28,16 @@ Mayor (wsp-opt) → Architect (wsp-sync) → Developer → Cleaner (relote) → 
 
 ## Town Services
 
-The town can commission external skills as municipal services. Each is optional — the town functions without them, but they add rigor.
+The town can commission external skills as municipal services. Each is optional.
 
-### wsp-opt — Planning Commission
+| Service | Role | When | Output |
+|---------|------|------|--------|
+| `wsp-opt` — Planning Commission | MoSCoW prioritization, version management, task tracking | Phase 2 (Propose) | `.wasup/todos/vx.y.z.md` |
+| `wsp-sync` — Records Department | Scan & sync stale `.md` docs | Phase 4 (after Cleaner) | `.wasup/sync/vx.y.z.md` |
+| `wsp-gate` — Inspector General | Production-readiness checks (audit, secrets, tests, etc.) | Phase 4 (after Governor audit) | `.wasup/gates/vx.y.z.md` |
+| `relote` — Town Chronicler | Keep-A-Changelog release notes | Phase 6 (Report) | `.wasup/changelogs/vx.y.z.md` |
 
-File: `skills/wsp-opt/SKILL.md`
-
-Provides MoSCoW prioritization, version management, and structured task tracking. The Mayor delegates to it when proposals need prioritization before building.
-
-- **When to call**: Phase 2 (Propose) — after drafting a proposal, before Architect plans
-- **How to call**: Delegate to wsp-opt's Phase 2 (MoSCoW Method) to categorize tasks
-- **Output**: `.wasup/todos/vx.y.z.md` with prioritized Must/Should/Could/Won't tasks
-
-### wsp-sync — Records Department
-
-File: `skills/wsp-sync/SKILL.md`
-
-Scans and updates `.md` files to match the current codebase. The Cleaner calls it to ensure town documentation stays accurate.
-
-- **When to call**: Phase 4 (Build) — after Cleaner polishes, before Governor audits
-- **How to call**: Delegate to wsp-sync's Phase 1 (Scan) and Phase 2 (Update)
-- **Output**: `.wasup/sync/vx.y.z.md` with sync report
-
-### wsp-gate — Inspector General
-
-File: `skills/wsp-gate/SKILL.md`
-
-Runs production-readiness checks: dependency audit, secret detection, test pass rate, memory patterns, deprecated APIs, unused code.
-
-- **When to call**: Phase 4 (Build) — after Governor audits, before Ratify
-- **How to call**: Delegate to wsp-gate's execution flow
-- **Output**: `.wasup/gates/vx.y.z.md` with PASSED/FAILED verdict
-
-### relote — Town Chronicler
-
-File: `skills/relote/SKILL.md`
-
-Generates Keep-A-Changelog release notes from git history and other wasup outputs. The Mayor calls it during the Report phase.
-
-- **When to call**: Phase 6 (Report) — as part of publishing the chronicle
-- **How to call**: Delegate to relote's three-phase workflow
-- **Output**: `.wasup/changelogs/vx.y.z.md`
+See respective `skills/<name>/SKILL.md` for full details.
 
 ## Prerequisites
 
@@ -183,7 +152,7 @@ Draft `.wasup/town/constitution.md`:
 Read current state:
 
 ```bash
-git status --short
+but status -fv
 git log --oneline -10
 ```
 
@@ -392,11 +361,8 @@ Write `.wasup/town/chronicle.md`:
 ## Important Notes
 
 - **Mayor starts and ends every session** — never skip Convene or Report
-- **Proposals flow in order** — Draft → Proposed → Planned → Built → Cleaned → Audited → Ratified
+- **Proposals flow in order**: Draft → Proposed → Planned → Built → Cleaned → Audited → Ratified
 - **Governor can reject at any review stage** — sends back with reasons
-- **Constitution is law** — citizens must not act outside it
-- **Each citizen runs as a focused sub-agent** — do not let one citizen do another's job
-- **Chronicle is append-only** — never overwrite, only append new entries
-- **External services are optional** — town functions without them, services add rigor
-- **Services write outside `.wasup/town/`** — wsp-opt → `.wasup/todos/`, wsp-sync → `.wasup/sync/`, wsp-gate → `.wasup/gates/`, relote → `.wasup/changelogs/`
-- **Services respect the constitution** — all external work must comply with town laws
+- **Each citizen focuses on their role** — don't let one do another's job
+- **Chronicle is append-only** — never overwrite
+- **Services are optional** — write outside `.wasup/town/` (todos/, sync/, gates/, changelogs/)

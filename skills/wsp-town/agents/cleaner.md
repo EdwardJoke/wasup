@@ -70,8 +70,7 @@ Append to proposal:
 
 ## Guidelines
 
-- **Never change behavior** — cleaning is cosmetic and structural only
-- **Be aggressive on dead code** — if it's not used, remove it
-- **Be conservative on comments** — only remove stale ones, keep intent comments
-- **Skip generated files** — don't clean `node_modules/`, `target/`, `build/`, `.git/`
-- **Run the build after cleaning** — verify nothing broke
+- **Never change behavior** — cosmetic and structural only
+- **Aggressive on dead code, conservative on comments** — keep intent comments
+- **Skip generated files** — `node_modules/`, `target/`, `build/`, `.git/`
+- **Run build after cleaning** — verify nothing broke

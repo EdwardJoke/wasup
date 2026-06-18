@@ -3,7 +3,7 @@ name: wsp-gate
 description: Pre-release security & production gate. Checks deps, secrets, test rate, memory patterns, deprecated APIs, unused code via CLIs/skills with generic fallback. The trigger is run gate, production check, security audit, is it ready to ship.
 metadata:
   author: EdwardJoke
-  version: 26.1.0
+  version: 26.2.0
 ---
 
 # wsp-gate — Pre-Release Quality Gate
@@ -66,19 +66,11 @@ Each check follows a three-tier priority:
 | CLI | `npm audit` | Node (package-lock.json, yarn.lock) |
 | CLI | `pip-audit` | Python (requirements.txt, Pipfile.lock) |
 | CLI | `osv-scanner` | Universal (auto-detect from lockfiles) |
-| Generic | Parse lockfile → check against local `advisory-db` or OSV API | Fallback if no CLI available |
+| Generic | Parse lockfile → check via OSV API | Fallback |
 
-**What it reports**: List of CVEs with severity, package, and fixed version. Also reports count per severity bucket.
+Reports CVE list with severity, package, fixed version. For fallback: prefer lockfile-aware scanners; mark unverified CVEs as `NEEDS_REVIEW`.
 
-**Fallback correctness rules**:
-- Prefer lockfile-aware scanners (`cargo audit`, `npm audit`, `pip-audit`, `osv-scanner`) over ad-hoc queries.
-- Never fail the gate on an unverified CVE match from a generic query alone.
-- A CVE can block release only if it includes all of: package name, affected version in the repo, and severity (or CVSS) from the scanner/advisory response.
-- If fallback data is incomplete, mark as `NEEDS_REVIEW` (warning), include evidence, and do not treat as fail_on by itself.
-
-**Generic fallback query** (if no CLI and can't install):
 ```bash
-# Use OSV API for each dependency in lockfile
 curl -s "https://api.osv.dev/v1/query" -d '{"package": {"name": "serde", "ecosystem": "crates.io"}, "version": "1.0.0"}'
 ```
 
@@ -87,36 +79,19 @@ curl -s "https://api.osv.dev/v1/query" -d '{"package": {"name": "serde", "ecosys
 | Tier | Tool | Scope |
 |------|------|-------|
 | Skill | (future: `wsp-secrets`) | — |
-| CLI | `gitleaks` | Universal (git history + filesystem) |
+| CLI | `gitleaks` | Universal |
 | CLI | `trufflehog` | Universal |
-| Generic | Pattern-based grep (see below) | Fallback |
+| Generic | Pattern-based grep | Fallback |
 
-**Generic fallback** — scan for common secret patterns in tracked files:
+Reports file, line, secret type. Classify findings as `confirmed`, `needs_review`, or `likely_false_positive`.
+
 ```bash
-# Scan for sensitive patterns
-grep -rnE '(?:password|secret|api.?key|token|auth.?token|private.?key)\s*[:=]\s*["'"'"'][^"'"'"']+["'"'"']' \
+grep -rnE '(?:password|secret|api.?key|token|auth.?token|private.?key)\s*[:=]\s*[\"'\"'\"'][^\"'\"'\"']+[\"'\"'\"']' \
   --include='*.{rs,js,ts,py,go,java,kt,swift,yml,yaml,toml,json,env}' \
   . 2>/dev/null | grep -v 'node_modules\|target\|\.git' | head -50
 ```
 
-Also scan for:
-- `-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----`
-- Base64 strings that look like tokens (>40 chars of `[A-Za-z0-9+/=]`)
-- `.env` files committed to git
-
-**What it reports**: File, line number, and the type of secret detected. If a path is a known false positive (e.g., test fixtures), report it separately.
-
-**Fallback correctness rules**:
-- Treat regex hits as **potential** secrets until verified.
-- Verify with at least one additional signal before marking as confirmed:
-  - entropy/format check (token-like shape), or
-  - context check (not in docs/examples/tests), or
-  - a second detector/tool finding the same line/path.
-- Classify findings as:
-  - `confirmed` (high confidence),
-  - `needs_review` (medium confidence),
-  - `likely_false_positive` (low confidence).
-- Only `confirmed` findings should trigger fail_on behavior automatically.
+Also scan for private keys (`-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----`), long base64 tokens, and committed `.env` files.
 
 ### `test_rate` — Test Pass Percentage
 
@@ -124,22 +99,9 @@ Also scan for:
 |------|------|-----------|
 | Skill | (future: `wsp-test`) | — |
 | CLI | Parse output of `cargo test`, `npm test`, `pytest`, `go test`, etc. | Universal |
-| Generic | Ask the user what test command to run, execute it, parse summary | Fallback |
+| Generic | Ask user for test command, run it, parse summary | Fallback |
 
-**How it works**:
-1. Detect the project stack from lockfiles / config files (`Cargo.toml` → `cargo test`, `package.json` → `npm test`, etc.)
-2. Run the test command
-3. Parse the summary line from output. Common patterns to recognize:
-   - `test result: ok. N passed; M failed` (Rust)
-   - `Tests:       N passed, M total` (Jest)
-   - `N passed, M failed in X.Ys` (pytest)
-   - `ok / FAIL  N tests passed / M failed` (Go)
-4. Calculate percentage = passed / (passed + failed) × 100
-5. Compare against `[gate.thresholds].test_pass_rate`
-
-**If parsing fails** (unrecognized output format): Present the raw test output to the user and ask them to confirm pass/fail.
-
-**What it reports**: Pass count, fail count, total, percentage, and whether it meets the threshold.
+Detect stack from lockfiles/config, run test command, parse summary line (e.g. `test result: ok. N passed; M failed`, `Tests: N passed, M total`). Calculate `passed / total × 100` vs threshold. If parsing fails, present raw output to user.
 
 ### `memory_patterns` — Memory Risk Detection
 
@@ -149,46 +111,30 @@ Also scan for:
 | CLI | `valgrind` / `leaks -q` | Native binaries |
 | Generic | Static pattern analysis | All languages |
 
-**Generic fallback** — scan source for known dangerous patterns:
+Reports file, line, pattern, severity. Static scan targets per-language risk patterns:
 
-- **Rust**: `.unwrap()`, `.expect()`, `unsafe`, `std::mem::forget`, `Box::into_raw`, `ManuallyDrop`, cycle-prone `Rc` + `RefCell` combinations
-- **Node/JS**: `process.on('unhandledRejection'`, unclosed `setInterval`/`setTimeout`, `new Promise` without `.catch()`
-- **Python**: `except:`, `os.system()`, `eval()`/`exec()`, unclosed file handles
-- **Go**: `defer` in loops, `goroutine` leaks, `panic` recovery
+- **Rust**: `.unwrap()`, `.expect()`, `unsafe`, `std::mem::forget`, `Box::into_raw`, `ManuallyDrop`, `Rc`+`RefCell` cyclones
+- **Node/JS**: unhandled rejections, unclosed timers, promises without `.catch()`
+- **Python**: bare `except:`, `os.system()`, `eval()`/`exec()`
+- **Go**: `defer` in loops, goroutine leaks, missing `panic` recovery
 
 ```bash
-# Example: scan for Rust unwrap patterns with context
 grep -rn '\.unwrap()' --include='*.rs' . 2>/dev/null | grep -v 'test\|#\[allow\|node_modules\|target'
 ```
-
-**What it reports**: File, line number, pattern found, and severity. For valgrind/leaks, include the actual leak summary.
 
 ### `deprecated_api` — Deprecated API Usage
 
 | Tier | Tool | Scope |
 |------|------|-------|
 | Skill | (future: `wsp-deprecation`) | — |
-| CLI | Check project-specific deprecation config | — |
-| Generic | Scan for known deprecated patterns | All languages |
+| CLI | Project-specific deprecation config | — |
+| Generic | Compiler/linter output scan | All languages |
 
-**Generic fallback** — detect common deprecated APIs:
-
-- **Rust**: `#\[deprecated\]` annotations in deps (check `cargo doc` or `cargo metadata` for deprecation warnings)
-- In general: parse compiler/linter output for `deprecated` / `removed` warnings
-
-The key approach: **run the build/lint command** and grep for `deprecated` / `removed` / `warning:` keywords in the stderr, then extract the relevant lines with file paths.
+Reports file, line, API name, suggested replacement. **Prefer compiler/linter deprecation warnings**; mark unverified matches as `needs_review`.
 
 ```bash
-# Run build and capture deprecation warnings
 cargo build 2>&1 | grep -i 'deprecated\|warning.*removed' | head -30
 ```
-
-**What it reports**: File, line number, the deprecated API name, and suggested replacement (if available from the warning message).
-
-**Fallback correctness rules**:
-- Prefer compiler/linter-produced deprecation warnings over static string matching.
-- Static pattern matches without compiler/linter evidence must be marked `needs_review`.
-- Only warnings that include file path and symbol/API name should be considered `confirmed`.
 
 ### `no_use` — Unused Files / Modules
 
@@ -196,24 +142,15 @@ cargo build 2>&1 | grep -i 'deprecated\|warning.*removed' | head -30
 |------|------|-------|
 | Skill | (future: `wsp-cleanup`) | — |
 | CLI | `cargo udeps` (Rust), `depcheck` (Node) | Specific stacks |
-| Generic | Git-based analysis | Universal |
+| Generic | Git + import graph analysis | Universal |
 
-**Generic fallback** — analyze git history and imports to find dead code:
-
-1. **Unused files**: Cross-reference all `.rs`/`.js`/`.ts`/`.py` files against `mod`/`import`/`require` statements. Any file never referenced is likely dead.
-2. **Dead exports**: Scan for exported/public items that are never imported anywhere else in the codebase.
+Reports potentially unused files/modules with confidence level. Cross-reference source files against `mod`/`import`/`require` statements; files never referenced are candidates.
 
 ```bash
-# Find files committed but never imported
-# Step 1: List all source files
 find src/ -name '*.rs' | sort > /tmp/all_files.txt
-# Step 2: Extract all mod/use references
 grep -rE '^mod |^pub mod |^use |^pub use ' src/ --include='*.rs' | \
   sed 's/.*mod //;s/.*use //;s/::.*//;s/;//' | sort -u > /tmp/imported.txt
-# Step 3: Diff (manual review recommended — false positives expected)
 ```
-
-**What it reports**: List of potentially unused files/modules with confidence level (high / medium / low). Always note false positives.
 
 ## Execution Flow
 
@@ -296,6 +233,6 @@ Or if FAILED:
 - **No installs during gate run**: If a CLI tool is missing, do not install it during this workflow. Use fallback checks and record the tool as missing in the report.
 - **Respect `.gitignore`**: Skip `node_modules/`, `target/`, `.git/`, `build/` in all file scans
 - **False positives**: When using generic fallbacks, bias toward reporting *potential* issues and let the user decide. Never silently fail a gate on a false positive.
-- **Confidence labels required**: For fallback security checks (`audit`, `secrets`, `deprecated_api`), label each finding as `confirmed`, `needs_review`, or `likely_false_positive`.
-- **Speed**: Prefer CLI tools over generic fallbacks — they're faster and more accurate. Generic fallbacks are the last resort.
-- **No side effects**: Never modify source code. Gate reads files, runs commands, writes reports — that's all.
+- **Label confidence**: For fallback checks (`audit`, `secrets`, `deprecated_api`), label findings as `confirmed`, `needs_review`, or `likely_false_positive`.
+- **Prefer CLIs** — faster and more accurate than fallbacks.
+- **No side effects**: Read-only — never modify source code.

@@ -59,7 +59,7 @@ Append to proposal:
 ## Guidelines
 
 - **One step at a time** — build, verify, commit, repeat
-- **If blocked** — note the blocker in the report and hand back to Mayor
-- **Stay within scope** — only implement what the proposal asks
-- **Follow existing conventions** — match the codebase's style
+- **If blocked** — report the blocker and hand back to Mayor
+- **Stay within scope** — only what the proposal asks
+- **Follow existing conventions** — match codebase style
 - **No cleanup** — leave that for Cleaner
